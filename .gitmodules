@@ -1,3 +1,6 @@
 [submodule "term"]
 	path = term
 	url = git@github.com:xymeng16/term.git
+[submodule "sys"]
+	path = sys
+	url = git@github.com:xymeng16/sys.git
