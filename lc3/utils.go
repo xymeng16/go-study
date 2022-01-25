@@ -16,3 +16,11 @@ func update_flags(r uint16) {
 		reg[R_COND] = FL_POS
 	}
 }
+
+func mem_read(u uint16) uint16 {
+	return u
+}
+
+func mem_write(addr uint16, val uint16) {
+
+}

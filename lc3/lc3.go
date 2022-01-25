@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 )
@@ -76,6 +77,10 @@ func main() {
 	setup_sigint_handler()
 	disable_input_buffering()
 
+	/* initialize the standard stream reader and writer */
+	reader = bufio.NewReader(os.Stdin)
+	writer = bufio.NewWriter(os.Stdout)
+
 	/* since exactly one condition flag should be set at any given time, set the Z flag */
 	reg[R_COND] = FL_ZRO
 
@@ -92,10 +97,6 @@ func main() {
 		reg[R_PC]++
 
 	}
-}
-
-func mem_read(u uint16) uint16 {
-	return u
 }
 
 func _(op uint16) {

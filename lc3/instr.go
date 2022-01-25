@@ -106,3 +106,51 @@ func JSR(instr uint16) {
 		reg[R_PC] = reg[r1]
 	}
 }
+
+func LD(instr uint16) {
+	r0 := (instr >> 0x9) & 0x7
+
+	pc_offset := sign_extend(instr&0x1FF, 9)
+
+	reg[r0] = mem_read(reg[R_PC] + pc_offset)
+
+	update_flags(r0)
+}
+
+func LDR(instr uint16) {
+	r0 := (instr >> 0x9) & 0x7
+	r1 := (instr >> 0x6) & 0x7
+
+	offset := sign_extend(instr&0x3F, 6)
+
+	reg[r0] = mem_read(reg[r1] + offset)
+
+	update_flags(r0)
+}
+
+func LEA(instr uint16) {
+	r0 := (instr >> 0x9) & 0x7
+
+	pc_offset := sign_extend(instr&0x1FF, 9)
+
+	reg[r0] = reg[R_PC] + pc_offset
+
+	update_flags(r0)
+}
+
+func ST(instr uint16) {
+	r0 := (instr >> 9) & 0x7
+
+	pc_offset := sign_extend(instr&0x1FF, 9)
+
+	mem_write(reg[R_PC]+pc_offset, reg[r0])
+}
+
+func STI(instr uint16) {
+	r0 := (instr >> 0x9) & 0x7
+	r1 := (instr >> 0x6) & 0x7
+
+	offset := sign_extend(instr&0x3F, 6)
+
+	mem_write(reg[r1]+offset, reg[r0])
+}
