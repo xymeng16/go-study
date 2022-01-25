@@ -6,6 +6,7 @@ package main
 import "C"
 import (
 	"bufio"
+	"fmt"
 )
 
 const (
@@ -21,11 +22,14 @@ var reader *bufio.Reader
 var writer *bufio.Writer
 
 func _TRAP_GETC() {
-
+	/* read a single ASCII char */
+	reg[R_R0] = uint16(C.getchar())
+	update_flags(R_R0)
 }
 
 func _TRAP_OUT() {
-
+	C.putc(C.char(reg[R_R0]), C.stdout)
+	C.fflush(C.stdout)
 }
 
 func _TRAP_PUTS() {
@@ -42,13 +46,38 @@ func _TRAP_PUTS() {
 }
 
 func _TRAP_IN() {
-
+	fmt.Print("Enter a character: ")
+	c := C.getchat()
+	C.putc(c, C.stdout)
+	C.fflush(C.stdout)
+	reg[R_R0] = uint16(c)
+	update_flags(R_R0)
 }
 
 func _TRAP_PUTSP() {
+	/* one char per byte (two bytes per word)
+	   here we need to swap back to
+	   big endian format */
+	loc := reg[R_R0]
+	for {
+		if memory[loc] == 0 {
+			break
+		}
 
+		c1 := byte(memory[loc] & 0xFF)
+		C.putc(C.char(c1), C.stdout)
+
+		c2 := byte(memory[loc] >> 8)
+		if c2 != 0 {
+			C.putc(C.char(c2), C.stdout)
+		}
+
+		loc++
+	}
+	C.fflush(C.stdout)
 }
 
 func _TRAP_HALT() {
-
+	fmt.Println("HALT")
+	running = false
 }

@@ -11,7 +11,7 @@ var memory []uint16
 
 /* 10 registers */
 const (
-	R_R0 uint8 = iota
+	R_R0 uint16 = iota
 	R_R1
 	R_R2
 	R_R3
@@ -28,7 +28,7 @@ var reg [R_COUNT]uint16
 
 /* 16 opcodes */
 const (
-	OP_BR   uint8 = iota /* branch */
+	OP_BR   uint16 = iota /* branch */
 	OP_ADD               /* add  */
 	OP_LD                /* load */
 	OP_ST                /* store */
@@ -53,9 +53,7 @@ const (
 	FL_NEG        = 1 << 2 /* negative */
 )
 
-func read_image(f string) bool {
-	return false
-}
+var running bool = false
 
 func main() {
 	/* load arguments */
@@ -89,7 +87,7 @@ func main() {
 	const PC_START = 0x3000
 	reg[R_PC] = PC_START
 
-	running := true
+	running = true
 	for running {
 		/* FETCH */
 		instr := mem_read(reg[R_PC])

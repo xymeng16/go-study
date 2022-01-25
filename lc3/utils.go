@@ -24,3 +24,7 @@ func mem_read(u uint16) uint16 {
 func mem_write(addr uint16, val uint16) {
 
 }
+
+func read_image(f string) bool {
+	return false
+}

@@ -4,8 +4,11 @@
 package main
 
 import (
+	"fmt"
 	"github.com/pkg/term/termios"
 	"golang.org/x/sys/unix"
+	"os"
+	"os/signal"
 )
 
 func check_key() uint16 {
