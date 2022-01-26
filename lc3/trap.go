@@ -28,7 +28,7 @@ func _TRAP_GETC() {
 }
 
 func _TRAP_OUT() {
-	C.putc(C.char(reg[R_R0]), C.stdout)
+	C.putc(C.int(reg[R_R0]), C.stdout)
 	C.fflush(C.stdout)
 }
 
@@ -47,7 +47,7 @@ func _TRAP_PUTS() {
 
 func _TRAP_IN() {
 	fmt.Print("Enter a character: ")
-	c := C.getchat()
+	c := C.getchar()
 	C.putc(c, C.stdout)
 	C.fflush(C.stdout)
 	reg[R_R0] = uint16(c)
@@ -65,11 +65,11 @@ func _TRAP_PUTSP() {
 		}
 
 		c1 := byte(memory[loc] & 0xFF)
-		C.putc(C.char(c1), C.stdout)
+		C.putc(C.int(c1), C.stdout)
 
 		c2 := byte(memory[loc] >> 8)
 		if c2 != 0 {
-			C.putc(C.char(c2), C.stdout)
+			C.putc(C.int(c2), C.stdout)
 		}
 
 		loc++
