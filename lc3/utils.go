@@ -1,10 +1,10 @@
 package main
 
 import (
+	"encoding/binary"
 	"fmt"
 	"math"
 	"os"
-	"unsafe"
 )
 
 func sign_extend(x uint16, bit_count int) uint16 {
@@ -38,18 +38,17 @@ func swap16(x uint16) uint16 {
 
 func read_image_file(f *os.File) {
 	/* the origin tells us where in memory to place the image */
-	var origin uint16 /* The first 16-bit */
-	p := (*[]byte)(unsafe.Pointer(&origin))
+	var origin_buff [2]byte /* The first 16-bit */
 	//binary.BigEndian.PutUint16()
-	read, err := f.Read(*p)
+	read, err := f.Read(origin_buff[:])
 	if err != nil {
 		fmt.Printf("image location read error, expect: 2, got: %d\n", read)
 		return
 	}
+	origin := binary.BigEndian.Uint16(origin_buff[:])
 
 	/* we know the maximum file size, so we only need one fread */
 	max_read := math.MaxUint16 - origin
-	p2 := (*[]byte)(unsafe.Pointer(&memory[origin]))
 
 }
 func read_image(f string) bool {
